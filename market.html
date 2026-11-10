@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0f766e"><link rel="manifest" href="manifest.webmanifest"><link rel="stylesheet" href="styles.css">
+  <title>CRE Signal | Market</title>
+</head>
+<body data-page="market">
+  <header class="topbar"><a class="brand" href="index.html"><span class="brand-mark">CS</span><span>CRE Signal</span></a><nav aria-label="Main navigation"><a href="index.html">Today</a><a href="browse.html">Browse</a><a class="active" href="market.html">Market</a></nav><span class="status-pill" id="connection-status">Loading</span></header>
+  <main class="shell">
+    <section class="page-heading"><p class="eyebrow">Market report</p><h1>The CRE analyst hiring pulse</h1><p class="lede">Every metric below is calculated in your browser from <code>data/history.csv</code>. As the archive grows, the report changes with it.</p></section>
+    <div class="market-grid">
+      <section class="panel market-section" id="new-per-day"><p class="eyebrow">01 / Flow</p><h2>New postings are arriving across the watchlist.</h2><p class="finding">The daily arrival rate shows when CRE employers are adding new opportunities.</p><div class="chart" data-chart="new"></div></section>
+      <section class="panel market-section" id="removed-per-day"><p class="eyebrow">02 / Exits</p><h2>Removed postings show where the market is closing fastest.</h2><p class="finding">This counts postings that a source stopped listing on each successful source day.</p><div class="chart" data-chart="removed"></div></section>
+      <section class="panel market-section"><p class="eyebrow">03 / Employers</p><h2 id="employer-finding">Open roles are distributed across the watchlist.</h2><p class="finding">A current employer comparison helps prioritize research and applications.</p><div class="chart" data-chart="employers"></div></section>
+      <section class="panel market-section"><p class="eyebrow">04 / Time to close</p><h2 id="days-open-finding">Days open are still being measured.</h2><p class="finding">Median days open uses only non-first-run postings with a known first-seen date and a removed date.</p><div class="stat-chart" id="days-open-stat"></div></section>
+      <section class="panel market-section"><p class="eyebrow">05 / Seven-day survival</p><h2 id="survival-finding">The seven-day removal share is still being measured.</h2><p class="finding">The denominator includes eligible postings first seen at least seven days before the latest run.</p><div class="stat-chart" id="survival-stat"></div></section>
+      <section class="panel market-section"><p class="eyebrow">06 / Geography</p><h2 id="location-finding">Open postings are spread across the market.</h2><p class="finding">Top locations among open postings provide a quick geographic read.</p><div class="chart" data-chart="locations"></div></section>
+    </div>
+  </main>
+  <footer class="footer">Calculations run client-side from the repository history.</footer>
+  <script src="app.js"></script>
+</body>
+</html>
