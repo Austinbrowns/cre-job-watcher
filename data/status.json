@@ -1,8 +1,8 @@
 {
-  "run_time": "2026-11-10T02:02:50.386572Z",
+  "run_time": "2026-11-10T20:28:49.326914Z",
   "first_run_date": "2026-11-10",
   "days_with_success": 1,
-  "open": 3962,
+  "open": 3946,
   "new_today": 0,
   "removed_today": 0,
   "sources": [
@@ -24,7 +24,7 @@
     {
       "name": "flexential",
       "ok": true,
-      "count": 21
+      "count": 23
     },
     {
       "name": "centennial",
@@ -34,7 +34,7 @@
     {
       "name": "pma",
       "ok": true,
-      "count": 10
+      "count": 9
     },
     {
       "name": "tpg",
@@ -79,7 +79,7 @@
     {
       "name": "turner_townsend",
       "ok": true,
-      "count": 3589
+      "count": 3572
     },
     {
       "name": "svn_lord_partners",
