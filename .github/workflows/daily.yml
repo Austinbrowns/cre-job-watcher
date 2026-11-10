@@ -1,0 +1,40 @@
+name: Daily CRE job watcher
+
+on:
+  schedule:
+    - cron: "15 13 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Fetch feeds, rebuild history, update Issue, and commit
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m watcher.pipeline --commit
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Prepare static site
+        run: |
+          mkdir -p public/data
+          cp index.html browse.html market.html styles.css app.js service-worker.js manifest.webmanifest icon.svg public/
+          cp data/history.csv data/status.json public/data/
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - name: Deploy Pages
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,27 @@
+name: GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Prepare static site
+        run: |
+          mkdir -p public/data
+          cp index.html browse.html market.html styles.css app.js service-worker.js manifest.webmanifest icon.svg public/
+          cp data/history.csv data/status.json public/data/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+      - uses: actions/deploy-pages@v4
