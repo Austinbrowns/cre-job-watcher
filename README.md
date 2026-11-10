@@ -41,6 +41,10 @@ market intelligence, investment analyst
 
 The pipeline keeps every posting returned by every source. The rule only controls the `in_role` flag and the default Browse view.
 
+## United States view
+
+The raw responses and `data/history.csv` intentionally retain every posting returned by every source, including international locations. The Browse page defaults to United States postings using the location's country code, country name, or U.S. state; the `All locations` option exposes the complete archive. This keeps the assignment's full-source requirement intact while making the site useful for a U.S.-focused analyst job search.
+
 ## Data files
 
 - `data/raw/<UTC date>/<source>.json.gz` — exact successful source responses, compressed.
@@ -65,7 +69,7 @@ The history columns are the required columns from the brief: `posting_id`, `sour
 - `tests/test_title_rule.py` — title-rule tests.
 - `tests/test_history.py` — first-seen, last-seen, removal, and reopening tests.
 - `index.html` — Today page.
-- `browse.html` — Browse page with filters and browser shortlist.
+- `browse.html` — Browse page with U.S.-default scope, all-location filters, and browser shortlist.
 - `market.html` — client-side six-section Market report.
 - `app.js` — browser data loading, CSV parsing, calculations, and interactions.
 - `styles.css` — shared responsive visual system.

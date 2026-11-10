@@ -42,6 +42,17 @@ function postingMarkup(row, compact = false, saved = false) {
   return `<article class="${compact ? "posting-row" : "posting-card"}"><a href="${esc(row.url)}" target="_blank" rel="noreferrer">${esc(row.title)}</a><div class="posting-meta">${esc(row.employer)} · ${esc(row.location || "Location not provided")}${row.department ? ` · ${esc(row.department)}` : ""}</div>${row.first_seen ? `<span class="tag">First seen ${esc(row.first_seen)}</span>` : ""}${compact ? "" : `<button class="star ${saved ? "saved" : ""}" data-star="${esc(row.posting_id)}" aria-label="${saved ? "Remove from shortlist" : "Save to shortlist"}">${saved ? "★" : "☆"}</button>`}</article>`;
 }
 
+const US_STATE_CODES = new Set("AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY DC".split(" "));
+const US_STATE_NAMES = new Set(["alabama", "alaska", "arizona", "arkansas", "california", "colorado", "connecticut", "delaware", "florida", "georgia", "hawaii", "idaho", "illinois", "indiana", "iowa", "kansas", "kentucky", "louisiana", "maine", "maryland", "massachusetts", "michigan", "minnesota", "mississippi", "missouri", "montana", "nebraska", "nevada", "new hampshire", "new jersey", "new mexico", "new york", "north carolina", "north dakota", "ohio", "oklahoma", "oregon", "pennsylvania", "rhode island", "south carolina", "south dakota", "tennessee", "texas", "utah", "vermont", "virginia", "washington", "west virginia", "wisconsin", "wyoming", "district of columbia"]);
+
+function isUSLocation(value) {
+  const location = String(value || "").trim();
+  if (!location) return false;
+  if (/\b(?:united states|u\.s\.a?\.?|usa|us)\b/i.test(location)) return true;
+  const parts = location.toLowerCase().split(/[,;/|]/).map(part => part.trim());
+  return parts.some(part => US_STATE_CODES.has(part.toUpperCase()) || US_STATE_NAMES.has(part));
+}
+
 function renderToday({status, history}) {
   setConnection("Online");
   document.getElementById("last-run").textContent = status.run_time ? new Date(status.run_time).toLocaleString() : "Not run";
@@ -62,21 +73,23 @@ function renderBrowse({history}) {
   setConnection("Online");
   let roleOnly = true;
   const shortlist = new Set(JSON.parse(localStorage.getItem(SHORTLIST_KEY) || "[]"));
+  const country = document.getElementById("country-filter");
   const employer = document.getElementById("employer-filter"), location = document.getElementById("location-filter");
   [...new Set(history.map(row => row.employer).filter(Boolean))].sort().forEach(value => employer.insertAdjacentHTML("beforeend", `<option value="${esc(value)}">${esc(value)}</option>`));
   [...new Set(history.map(row => row.location).filter(Boolean))].sort().forEach(value => location.insertAdjacentHTML("beforeend", `<option value="${esc(value)}">${esc(value)}</option>`));
   const render = () => {
     const search = document.getElementById("title-search").value.toLowerCase().trim();
     const selectedEmployer = employer.value, selectedLocation = location.value, minDays = Number(document.getElementById("days-filter").value || 0), sort = document.getElementById("sort-filter").value;
+    const usOnly = country.value !== "all";
     const latest = history.reduce((max, row) => row.last_seen > max ? row.last_seen : max, "");
-    let rows = history.filter(row => row.status === "open" && (!roleOnly || row.in_role === "true") && (!selectedEmployer || row.employer === selectedEmployer) && (!selectedLocation || row.location === selectedLocation) && (!search || row.title.toLowerCase().includes(search)) && (!minDays || daysBetween(row.first_seen, latest) >= minDays));
+    let rows = history.filter(row => row.status === "open" && (!usOnly || isUSLocation(row.location)) && (!roleOnly || row.in_role === "true") && (!selectedEmployer || row.employer === selectedEmployer) && (!selectedLocation || row.location === selectedLocation) && (!search || row.title.toLowerCase().includes(search)) && (!minDays || daysBetween(row.first_seen, latest) >= minDays));
     rows.sort((a, b) => sort === "oldest" ? a.first_seen.localeCompare(b.first_seen) : b.first_seen.localeCompare(a.first_seen));
     document.getElementById("result-count").textContent = `${rows.length} open posting${rows.length === 1 ? "" : "s"}`;
     document.getElementById("shortlist-count").textContent = `${shortlist.size} shortlisted`;
     document.getElementById("browse-results").innerHTML = rows.length ? rows.map(row => postingMarkup(row, false, shortlist.has(row.posting_id))).join("") : `<div class="empty">No postings match these filters.</div>`;
     document.querySelectorAll("[data-star]").forEach(button => button.addEventListener("click", () => { const id = button.dataset.star; shortlist.has(id) ? shortlist.delete(id) : shortlist.add(id); localStorage.setItem(SHORTLIST_KEY, JSON.stringify([...shortlist])); render(); }));
   };
-  [employer, location, document.getElementById("days-filter"), document.getElementById("sort-filter")].forEach(element => element.addEventListener("change", render));
+  [country, employer, location, document.getElementById("days-filter"), document.getElementById("sort-filter")].forEach(element => element.addEventListener("change", render));
   document.getElementById("title-search").addEventListener("input", render);
   document.getElementById("role-only").addEventListener("click", () => { roleOnly = true; document.getElementById("role-only").classList.add("active"); document.getElementById("all-postings").classList.remove("active"); render(); });
   document.getElementById("all-postings").addEventListener("click", () => { roleOnly = false; document.getElementById("all-postings").classList.add("active"); document.getElementById("role-only").classList.remove("active"); render(); });
