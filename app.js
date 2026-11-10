@@ -89,15 +89,26 @@ function makeBars(element, data, warm = false) {
   element.innerHTML = data.map(item => `<div class="bar-group"><span class="bar-value">${item.value}</span><div class="bar ${warm ? "warm" : ""}" style="height:${Math.max(3, item.value / max * 120)}px"></div><span class="bar-label">${esc(item.label)}</span></div>`).join("");
 }
 
+function makeDualBars(element, allData, roleData) {
+  const all = new Map(allData.map(item => [item.label, item.value]));
+  const role = new Map(roleData.map(item => [item.label, item.value]));
+  const labels = [...new Set([...all.keys(), ...role.keys()])].sort().slice(-12);
+  if (!labels.length) { element.innerHTML = `<div class="empty">Not enough history yet.</div>`; return; }
+  const max = Math.max(...labels.flatMap(label => [all.get(label) || 0, role.get(label) || 0]), 1);
+  element.innerHTML = labels.map(label => {
+    const allValue = all.get(label) || 0, roleValue = role.get(label) || 0;
+    return `<div class="bar-group"><span class="bar-value">${allValue}/${roleValue}</span><div class="bar-pair"><div class="bar" style="height:${Math.max(3, allValue / max * 120)}px"></div><div class="bar role-bar" style="height:${Math.max(3, roleValue / max * 120)}px"></div></div><span class="bar-label">${esc(label)}</span></div>`;
+  }).join("");
+}
+
 function median(values) { const sorted = [...values].sort((a, b) => a - b); if (!sorted.length) return null; const mid = Math.floor(sorted.length / 2); return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2; }
 function renderMarket({history}) {
   setConnection("Online");
   const latest = history.reduce((max, row) => row.last_seen > max ? row.last_seen : max, "");
-  const countBy = (rows, field) => Object.entries(rows.reduce((acc, row) => { const key = row[field] || "Unknown"; acc[key] = (acc[key] || 0) + 1; return acc; }, {})).sort((a, b) => b[1] - a[1]).slice(0, 12).map(([label, value]) => ({label, value}));
-  const newAll = countBy(history.filter(row => row.first_run !== "true"), "first_seen").sort((a, b) => a.label.localeCompare(b.label));
-  const newRole = countBy(history.filter(row => row.first_run !== "true" && row.in_role === "true"), "first_seen").sort((a, b) => a.label.localeCompare(b.label));
-  makeBars(document.querySelector('[data-chart="new"]'), newAll); 
-  const newChart = document.querySelector('[data-chart="new"]'); if (newRole.length) newChart.insertAdjacentHTML("beforeend", `<span class="tag">Role-filtered days: ${newRole.length}</span>`);
+  const countBy = (rows, field, limit = 12) => Object.entries(rows.reduce((acc, row) => { const key = row[field] || "Unknown"; acc[key] = (acc[key] || 0) + 1; return acc; }, {})).sort((a, b) => b[1] - a[1]).slice(0, limit).map(([label, value]) => ({label, value}));
+  const newAll = countBy(history.filter(row => row.first_run !== "true"), "first_seen", Number.MAX_SAFE_INTEGER).sort((a, b) => a.label.localeCompare(b.label));
+  const newRole = countBy(history.filter(row => row.first_run !== "true" && row.in_role === "true"), "first_seen", Number.MAX_SAFE_INTEGER).sort((a, b) => a.label.localeCompare(b.label));
+  makeDualBars(document.querySelector('[data-chart="new"]'), newAll, newRole);
   makeBars(document.querySelector('[data-chart="removed"]'), countBy(history.filter(row => row.removed_date), "removed_date").sort((a, b) => a.label.localeCompare(b.label)), true);
   const employers = countBy(history.filter(row => row.status === "open"), "employer"); makeBars(document.querySelector('[data-chart="employers"]'), employers); document.getElementById("employer-finding").textContent = employers.length ? `${employers[0].label} has the largest open-posting footprint.` : "Open roles are distributed across the watchlist.";
   const eligibleDays = history.filter(row => row.first_run !== "true" && row.status === "removed" && row.first_seen && row.removed_date).map(row => daysBetween(row.first_seen, row.removed_date));
