@@ -50,6 +50,33 @@ The pipeline keeps every posting returned by every source. The rule only control
 
 The history columns are the required columns from the brief: `posting_id`, `source`, `source_id`, `employer`, `title`, `location`, `department`, `posted_date`, `url`, `in_role`, `first_run`, `first_seen`, `last_seen`, `status`, and `removed_date`.
 
+## Repository file map
+
+- `watcher/config.py` — 16-employer ATS configuration and endpoint construction.
+- `watcher/sources.py` — JSON fetchers, SmartRecruiters pagination, and source normalizers.
+- `watcher/title_rules.py` — the CRE analyst title rule.
+- `watcher/history.py` — deterministic raw-file-to-history builder and daily change logic.
+- `watcher/status.py` — status-file calculations.
+- `watcher/github.py` — daily Issue creation, update, and closing logic.
+- `watcher/pipeline.py` — end-to-end daily pipeline and optional Git commit/push.
+- `watcher/__init__.py` — package metadata.
+- `tests/fixtures/*.json` — representative Greenhouse, Lever, and SmartRecruiters responses.
+- `tests/test_sources.py` — conversion tests for every ATS type.
+- `tests/test_title_rule.py` — title-rule tests.
+- `tests/test_history.py` — first-seen, last-seen, removal, and reopening tests.
+- `index.html` — Today page.
+- `browse.html` — Browse page with filters and browser shortlist.
+- `market.html` — client-side six-section Market report.
+- `app.js` — browser data loading, CSV parsing, calculations, and interactions.
+- `styles.css` — shared responsive visual system.
+- `manifest.webmanifest`, `service-worker.js`, `icon.svg` — installable/offline web-app files.
+- `.github/workflows/tests.yml` — pytest on every push and pull request.
+- `.github/workflows/daily.yml` — scheduled fetch, Issue, commit, and Pages deployment.
+- `.github/workflows/pages.yml` — Pages deployment for normal `main` branch pushes.
+- `pyproject.toml`, `requirements.txt`, `requirements-dev.txt` — Python project and test configuration.
+- `.gitignore` — excludes local caches while preserving raw data.
+- `submission.txt` — four-line submission template to complete before turning in.
+
 ## Run locally
 
 ```powershell
