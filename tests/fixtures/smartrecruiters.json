@@ -1,0 +1,19 @@
+{
+  "pages": [
+    {
+      "content": [
+        {
+          "id": "sr-301",
+          "name": "Commercial Mortgage Analyst",
+          "releasedDate": "2026-01-02T10:00:00Z",
+          "location": {"city": "Toronto", "region": "ON", "country": "Canada"},
+          "department": {"label": "Commercial Credit"},
+          "ref": "https://jobs.example.com/sr-301"
+        }
+      ],
+      "totalFound": 1,
+      "offset": 0,
+      "limit": 100
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "id": "lever-201",
+    "text": "Real Estate Market Analyst",
+    "categories": {"location": "Oakland, CA", "team": "Brokerage"},
+    "createdAt": 1767258000000,
+    "hostedUrl": "https://jobs.example.com/lever-201"
+  },
+  {
+    "id": "lever-202",
+    "text": "Property Manager",
+    "categories": {"location": "San Jose, CA", "team": "Property Management"},
+    "createdAt": 1767258000000,
+    "hostedUrl": "https://jobs.example.com/lever-202"
+  }
+]

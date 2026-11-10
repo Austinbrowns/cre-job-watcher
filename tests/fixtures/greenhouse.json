@@ -1,0 +1,20 @@
+{
+  "jobs": [
+    {
+      "id": 101,
+      "title": "Investment Analyst",
+      "location": {"name": "Chicago, IL"},
+      "departments": [{"name": "Debt + Equity"}],
+      "first_published": "2026-01-01T09:00:00Z",
+      "absolute_url": "https://example.com/jobs/101"
+    },
+    {
+      "id": 102,
+      "title": "Software Engineer",
+      "location": {"name": "Remote"},
+      "departments": [{"name": "Technology"}],
+      "updated_at": "2026-01-01T09:00:00Z",
+      "absolute_url": "https://example.com/jobs/102"
+    }
+  ]
+}
