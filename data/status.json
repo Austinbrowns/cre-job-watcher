@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-10T20:28:49.326914Z",
+  "run_time": "2026-11-11T20:13:19.238131Z",
   "first_run_date": "2026-11-10",
-  "days_with_success": 1,
-  "open": 3946,
-  "new_today": 0,
-  "removed_today": 0,
+  "days_with_success": 2,
+  "open": 3967,
+  "new_today": 92,
+  "removed_today": 71,
   "sources": [
     {
       "name": "crexi",
@@ -24,22 +24,22 @@
     {
       "name": "flexential",
       "ok": true,
-      "count": 23
+      "count": 22
     },
     {
       "name": "centennial",
       "ok": true,
-      "count": 22
+      "count": 23
     },
     {
       "name": "pma",
       "ok": true,
-      "count": 9
+      "count": 10
     },
     {
       "name": "tpg",
       "ok": true,
-      "count": 14
+      "count": 13
     },
     {
       "name": "pretium",
@@ -64,7 +64,7 @@
     {
       "name": "flow",
       "ok": true,
-      "count": 27
+      "count": 24
     },
     {
       "name": "eq_bank",
@@ -74,12 +74,12 @@
     {
       "name": "colliers",
       "ok": true,
-      "count": 82
+      "count": 84
     },
     {
       "name": "turner_townsend",
       "ok": true,
-      "count": 3572
+      "count": 3594
     },
     {
       "name": "svn_lord_partners",
