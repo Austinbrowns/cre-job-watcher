@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-11T20:13:19.238131Z",
+  "run_time": "2026-11-12T20:51:01.475879Z",
   "first_run_date": "2026-11-10",
-  "days_with_success": 2,
-  "open": 3967,
-  "new_today": 92,
-  "removed_today": 71,
+  "days_with_success": 3,
+  "open": 3957,
+  "new_today": 59,
+  "removed_today": 69,
   "sources": [
     {
       "name": "crexi",
@@ -14,7 +14,7 @@
     {
       "name": "northmarq",
       "ok": true,
-      "count": 26
+      "count": 18
     },
     {
       "name": "sands_investment_group",
@@ -24,7 +24,7 @@
     {
       "name": "flexential",
       "ok": true,
-      "count": 22
+      "count": 21
     },
     {
       "name": "centennial",
@@ -69,17 +69,17 @@
     {
       "name": "eq_bank",
       "ok": true,
-      "count": 81
+      "count": 80
     },
     {
       "name": "colliers",
       "ok": true,
-      "count": 84
+      "count": 86
     },
     {
       "name": "turner_townsend",
       "ok": true,
-      "count": 3594
+      "count": 3592
     },
     {
       "name": "svn_lord_partners",
