@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-14T18:45:14.500006Z",
+  "run_time": "2026-11-15T19:23:43.665529Z",
   "first_run_date": "2026-11-10",
-  "days_with_success": 5,
+  "days_with_success": 6,
   "open": 3930,
-  "new_today": 20,
-  "removed_today": 15,
+  "new_today": 0,
+  "removed_today": 0,
   "sources": [
     {
       "name": "crexi",
