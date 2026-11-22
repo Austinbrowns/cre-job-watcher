@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-21T20:08:04.070185Z",
+  "run_time": "2026-11-22T20:22:57.332097Z",
   "first_run_date": "2026-11-10",
-  "days_with_success": 12,
-  "open": 3996,
-  "new_today": 20,
-  "removed_today": 25,
+  "days_with_success": 13,
+  "open": 3997,
+  "new_today": 2,
+  "removed_today": 1,
   "sources": [
     {
       "name": "crexi",
@@ -79,7 +79,7 @@
     {
       "name": "turner_townsend",
       "ok": true,
-      "count": 3646
+      "count": 3647
     },
     {
       "name": "svn_lord_partners",
