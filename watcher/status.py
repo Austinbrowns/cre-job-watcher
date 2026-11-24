@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .config import SOURCES
-from .history import change_lists, latest_raw_date
+from .history import change_lists
 
 
 def build_status(
@@ -12,7 +12,11 @@ def build_status(
     history_rows: list[dict[str, str]],
     source_results: dict[str, dict],
 ) -> dict:
-    raw_days = sorted({day for day_dir in raw_root.iterdir() if day_dir.is_dir() for day in [day_dir.name]}) if raw_root.exists() else []
+    raw_days = sorted(
+        day_dir.name
+        for day_dir in raw_root.iterdir()
+        if day_dir.is_dir() and any(day_dir.glob("*.json.gz"))
+    ) if raw_root.exists() else []
     # "Today" is the UTC date of the run, not the most recent historical day.
     # This keeps new_today/removed_today at zero when every source fails today.
     latest_day = run_time.astimezone(timezone.utc).date().isoformat()

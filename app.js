@@ -36,6 +36,20 @@ function setConnection(text, offline = false) {
   if (item) { item.textContent = text; if (offline) item.style.background = "#fae8dc"; }
 }
 
+function loadShortlist(history) {
+  const knownIds = new Set(history.map(row => row.posting_id));
+  try {
+    const saved = JSON.parse(localStorage.getItem(SHORTLIST_KEY) || "[]");
+    return new Set(Array.isArray(saved) ? saved.filter(id => typeof id === "string" && knownIds.has(id)) : []);
+  } catch {
+    return new Set();
+  }
+}
+
+function saveShortlist(shortlist) {
+  try { localStorage.setItem(SHORTLIST_KEY, JSON.stringify([...shortlist])); } catch { /* storage may be disabled */ }
+}
+
 function esc(value) { return String(value || "").replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[char])); }
 function daysBetween(start, end) { return Math.max(0, Math.round((new Date(`${end}T00:00:00Z`) - new Date(`${start}T00:00:00Z`)) / 86400000)); }
 function postingMarkup(row, compact = false, saved = false) {
@@ -72,7 +86,7 @@ function renderToday({status, history}) {
 function renderBrowse({history}) {
   setConnection("Online");
   let roleOnly = true;
-  const shortlist = new Set(JSON.parse(localStorage.getItem(SHORTLIST_KEY) || "[]"));
+  const shortlist = loadShortlist(history);
   const country = document.getElementById("country-filter");
   const employer = document.getElementById("employer-filter"), location = document.getElementById("location-filter");
   [...new Set(history.map(row => row.employer).filter(Boolean))].sort().forEach(value => employer.insertAdjacentHTML("beforeend", `<option value="${esc(value)}">${esc(value)}</option>`));
@@ -87,7 +101,7 @@ function renderBrowse({history}) {
     document.getElementById("result-count").textContent = `${rows.length} open posting${rows.length === 1 ? "" : "s"}`;
     document.getElementById("shortlist-count").textContent = `${shortlist.size} shortlisted`;
     document.getElementById("browse-results").innerHTML = rows.length ? rows.map(row => postingMarkup(row, false, shortlist.has(row.posting_id))).join("") : `<div class="empty">No postings match these filters.</div>`;
-    document.querySelectorAll("[data-star]").forEach(button => button.addEventListener("click", () => { const id = button.dataset.star; shortlist.has(id) ? shortlist.delete(id) : shortlist.add(id); localStorage.setItem(SHORTLIST_KEY, JSON.stringify([...shortlist])); render(); }));
+    document.querySelectorAll("[data-star]").forEach(button => button.addEventListener("click", () => { const id = button.dataset.star; shortlist.has(id) ? shortlist.delete(id) : shortlist.add(id); saveShortlist(shortlist); render(); }));
   };
   [country, employer, location, document.getElementById("days-filter"), document.getElementById("sort-filter")].forEach(element => element.addEventListener("change", render));
   document.getElementById("title-search").addEventListener("input", render);

@@ -1,6 +1,6 @@
 import gzip
 import json
-import shutil
+import tempfile
 from pathlib import Path
 
 from watcher.history import build_history
@@ -24,11 +24,8 @@ def job(job_id: str, title: str):
 
 
 def test_first_seen_last_seen_removed_and_reopened_logic():
-    test_root = Path(__file__).parent / ".tmp-history"
-    if test_root.exists():
-        shutil.rmtree(test_root)
-    raw = test_root / "raw"
-    try:
+    with tempfile.TemporaryDirectory(prefix="cre-job-watcher-history-") as directory:
+        raw = Path(directory) / "raw"
         write_raw(raw, "2026-01-01", [job("a", "Investment Analyst"), job("b", "Research Analyst")])
         write_raw(raw, "2026-01-02", [job("a", "Investment Analyst"), job("c", "Valuation Analyst")])
         write_raw(raw, "2026-01-03", [job("a", "Investment Analyst"), job("b", "Research Analyst")])
@@ -52,6 +49,3 @@ def test_first_seen_last_seen_removed_and_reopened_logic():
         assert rows["c"]["last_seen"] == "2026-01-02"
         assert rows["c"]["status"] == "removed"
         assert rows["c"]["removed_date"] == "2026-01-03"
-    finally:
-        if test_root.exists():
-            shutil.rmtree(test_root)
