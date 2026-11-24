@@ -1,10 +1,10 @@
 {
-  "run_time": "2026-11-24T00:55:50.378699Z",
+  "run_time": "2026-11-24T23:02:23.868744Z",
   "first_run_date": "2026-11-10",
   "days_with_success": 14,
-  "open": 3969,
-  "new_today": 154,
-  "removed_today": 182,
+  "open": 3938,
+  "new_today": 198,
+  "removed_today": 257,
   "sources": [
     {
       "name": "crexi",
@@ -69,17 +69,17 @@
     {
       "name": "eq_bank",
       "ok": true,
-      "count": 80
+      "count": 78
     },
     {
       "name": "colliers",
       "ok": true,
-      "count": 75
+      "count": 74
     },
     {
       "name": "turner_townsend",
       "ok": true,
-      "count": 3640
+      "count": 3612
     },
     {
       "name": "svn_lord_partners",
